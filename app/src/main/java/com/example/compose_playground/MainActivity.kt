@@ -25,7 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.compose_playground.ui.theme.ComposeplaygroundTheme
+import kotlinx.serialization.Serializable
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -33,102 +37,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val navController = rememberNavController()
+
             ComposeplaygroundTheme {
                 // A surface container using the 'background' color from the theme
-                Scaffold(
-                    modifier = Modifier,
-                    topBar = {
-                        TopAppBar(
-                            title = {
-                                Text(text = "Home")
+                NavHost(navController, startDestination = NavigationRoute.TOP) {
+                    composable(NavigationRoute.TOP) {
+                        TopScreen(
+                            navController = navController,
+                            onClickForQiita = {
+                                navController.navigate(NavigationRoute.QIITA)
                             },
-                            modifier = Modifier.shadow(elevation = 2.dp)
                         )
-
-                    },
-                    bottomBar = {
-                        NavigationBar {
-                            NavigationBarItem(
-                                selected = true,
-                                onClick = { /*TODO*/ },
-                                icon = {
-                                    Icon(
-                                        imageVector = Icons.Default.Home,
-                                        contentDescription = "Home"
-                                    )
-                                },
-                                label = { Text(text = "Home") }
-                            )
-                            NavigationBarItem(
-                                selected = false,
-                                onClick = { /*TODO*/ },
-                                icon = {
-                                    Icon(
-                                        imageVector = Icons.Default.Settings,
-                                        contentDescription = "setting"
-                                    )
-                                },
-                                label = { Text(text = "Setting") }
-                            )
-                        }
-                    }
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(it)
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text(
-                            text = "Experience Jetpack Compose",
-                            fontSize = 24.sp
-                        )
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-
-                        ) {
-                            items(Components.entries.size) {
-                                Button(
-                                    onClick = { /*TODO*/ },
-                                    modifier = Modifier.width(240.dp)
-
-                                ) {
-                                    Text(text = Components.entries[it].toString() + " Component")
-                                }
-                            }
-
-                        }
                     }
                 }
             }
         }
     }
-}
-
-enum class Components {
-    AppBar,
-    Badge,
-    Button,
-    Card,
-    Carousel,
-    CheckBox,
-    Chips,
-    DataPicker,
-    Dialog,
-    Divider,
-    List,
-    Menu,
-    Navigation,
-    ProgressIndicator,
-    RadioButton,
-    Search,
-    Sheet,
-    Slider,
-    SnackBar,
-    Switch,
-    Tab,
-    TextField,
-    TimePicker,
-    Tooltip
 }
